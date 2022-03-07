@@ -15,7 +15,7 @@ class HitApi extends Command
      *
      * @var string
      */
-    protected $signature = 'hello';
+    protected $signature = 'GetSports';
 
     /**
      * The console command description.
