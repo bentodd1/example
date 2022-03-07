@@ -9,6 +9,7 @@ class Casino extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'key',
         'title',
 

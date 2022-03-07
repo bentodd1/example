@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
 use App\Models\Sport;
@@ -66,50 +67,60 @@ class GetLines extends Command
     {
         $sport = Sport::where( 'key', 'basketball_ncaab')->first();
 
-        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/?apiKey=1a12221aff5a1654bb760995fdfea015&regions=us&markets=spreads&oddsFormat=american
-');
+        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/?apiKey=1a12221aff5a1654bb760995fdfea015&regions=us&markets=spreads&oddsFormat=american');
 
         $allGames = $response->json();
 
         //TODO needs to match commenceTime
         foreach ($allGames as $apiGame){
-            $homeTeam = $apiGame['homeTeam'];
-            $awayTeam = $apiGame['awayTeam'];
+            $homeTeam = $apiGame['home_team'];
+            $awayTeam = $apiGame['away_team'];
             $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)
                 ->first();
             if(!$game){
+                //TODO fill this out
                 $game = new Game();
             }
 
-            $bookMakers = $game['bookmakers'];
+            $bookMakers = $apiGame['bookmakers'];
 
             foreach ($bookMakers as $bookMaker){
                 $bookMaker = $bookMaker['key'];
+                $casino = Casino::where()->first('key', $bookMaker);
                 $markets = $bookMaker['markets'];
+                $homeTeamSpread = 0;
+                $awayTeamSpread= 0;
                 foreach ($markets as $market){
                     if($market['key'] == 'spreads')
                     {
                         $outcomes = $market['outcomes'];
+                        foreach ($outcomes as $outcome) {
+
+                            //TODO GET OLD LINE
+                            //TODO get most recent.
+                            //Check if line is different.
+                            // If so Create a new one.
+                            // Record the line Movement.
+                            if ($outcome['name'] == $homeTeam) {
+                                $homeTeamSpread = $outcome['point'];
+//
+                            }
+                            if ($outcome['name'] == $awayTeam) {
+                                $awayTeamSpread = $outcome['point'];
+
+                            }
+                        }
+
 
                     }
                 }
-
+                $gameBettingLine = new GameBettingLine(['gameId' => $game['id'],'casinoId' => $casino['id'],'homeTeamSpread' => $homeTeamSpread, 'awayTeamSpread' => $awayTeamSpread]);
+                $gameBettingLine->save();
 
             }
         }
 
-            //TODO get most recent.
-            $line = GameBettingLine::where('sportId', $sport['id'])->where('homeTeam', $line['homeTeam'])->where('awayTeam', $line['awayTem'])
-                ->get();
-            if(!$line){
-                $line = new GameBettingLine();
-                $line->save();
-            }
-            else{
-                //Check if line is different.
-                // If so Create a new one.
-                // Record the line Movement.
-            }
+
 
 
     }
