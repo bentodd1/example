@@ -9,6 +9,7 @@ class Game extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'sportId',
         'apiKey',
         'title',

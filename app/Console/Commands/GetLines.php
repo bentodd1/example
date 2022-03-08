@@ -78,15 +78,22 @@ class GetLines extends Command
             $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)
                 ->first();
             if(!$game){
-                //TODO fill this out
-                $game = new Game();
+                $commenceTime  = $apiGame['commence_time'];
+                $commenceTime = str_replace('T',' ',$commenceTime);
+                $commenceTime = str_replace('Z','',$commenceTime);
+
+                //TODO split game up
+                $game = new Game(['sportId' =>$sport['id'],'apiKey' => $apiGame['id'], 'homeTeam' => $homeTeam, 'awayTeam' => $awayTeam,'commenceTime' => $commenceTime]);
+                $game->save();
             }
 
             $bookMakers = $apiGame['bookmakers'];
 
             foreach ($bookMakers as $bookMaker){
-                $bookMaker = $bookMaker['key'];
-                $casino = Casino::where()->first('key', $bookMaker);
+                $key = $bookMaker['key'];
+                $this->alert($key);
+                $this->alert($game['id']);
+                $casino = Casino::where('key', $key)->first();
                 $markets = $bookMaker['markets'];
                 $homeTeamSpread = 0;
                 $awayTeamSpread= 0;

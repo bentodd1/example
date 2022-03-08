@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('apiKey');
             $table->index('sportId');
             $table->foreign('sportId')->references('id')->on('sports')->onDelete('cascade');
-            $table->time('commenceTime');
+            $table->dateTimeTz('commenceTime');
             $table->string('homeTeam');
             $table->string('awayTeam');
             $table->timestamps();
