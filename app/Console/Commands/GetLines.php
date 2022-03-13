@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
+use App\Models\SharpCasino;
 use App\Models\Sport;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -87,7 +88,7 @@ class GetLines extends Command
             $commenceTime = str_replace('Z', '', $commenceTime);
             if($commenceTime < Carbon::now('UTC'))
             {
-                break;
+                continue;
             }
             $this->alert("Getting game $homeTeam vs $awayTeam");
             $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)->where('commenceTime', $commenceTime)
@@ -157,10 +158,13 @@ class GetLines extends Command
         // For now compare with a few casinos.
 
         foreach ($lines as $line) {
+            $this->alert('Inside line loops');
             $homeSpread = $line['homeTeamSpread'];
             $awaySpread = $line['awayTeamSpread'];
             $gameId = $line['gameId'];
-            $otherLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->get();
+            $sharpCasinoIds = SharpCasino::all('id');
+            $otherLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
+
             foreach ($otherLines as $otherLine) {
                 $homeCompareSpread = $otherLine['homeTeamSpread'];
                 $awayCompareSpread = $otherLine['awayTeamSpread'];
