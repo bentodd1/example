@@ -6,6 +6,7 @@ use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
 use App\Models\SharpCasino;
+use App\Models\SimulatedBet;
 use App\Models\Sport;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -182,6 +183,9 @@ class GetLines extends Command
                     $casinoKey2 = $casino2['key'];
                     $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
                     $this->alert("Game has a spread Mismatch of $homeDiff");
+                    $simulatedBet = new SimulatedBet(['sharpBookId' => $otherLine['id'], 'nonSharpBookId' => $line['id']]);
+                    $simulatedBet->save();
+
                 }
             }
 
