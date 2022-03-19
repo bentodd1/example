@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SimulatedBet extends Model
+class Score extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
-        'sharpBettingLineId',
-        'nonSharpBettingLineId'
+        'gameId',
+        'sportId',
+        'homeTeamScore',
+        'awayTeamScore',
+        'apiId',
+        'lastUpdated'
     ];
 }
+

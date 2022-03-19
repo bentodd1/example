@@ -125,7 +125,7 @@ class GetLines extends Command
                         }
                     }
                 }
-                $currentBetLine = GameBettingLine::where('gameId', $game['id'])->where('casinoId', $casino['id'])->where('homeTeamSpread', $homeTeamSpread)->where('awayTeamSpread', $awayTeamSpread)->orderBy('updated_at', 'desc')->first();
+                $currentBetLine = GameBettingLine::where('gameId', $game['id'])->where('casinoId', $casino['id'])->where('homeTeamSpread', $homeTeamSpread)->where('awayTeamSpread', $awayTeamSpread)->where('isCurrent', true)->orderBy('updated_at', 'desc')->first();
                 if (!$currentBetLine) {
 
                     $gameBettingLine = new GameBettingLine(['gameId' => $game['id'], 'casinoId' => $casino['id'], 'homeTeamSpread' => $homeTeamSpread, 'awayTeamSpread' => $awayTeamSpread, 'isCurrent' => true]);
@@ -163,9 +163,12 @@ class GetLines extends Command
             $homeSpread = $line['homeTeamSpread'];
             $awaySpread = $line['awayTeamSpread'];
             $gameId = $line['gameId'];
-            $sharpCasinoIds = SharpCasino::all('id');
+            $sharpCasinoIds = SharpCasino::all('casinoId');
+            $this->alert('sharp casinos');
+            $this->alert($sharpCasinoIds);
             $otherLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
-
+            $this->alert('other lines size');
+            $this->alert(sizeof($otherLines));
             foreach ($otherLines as $otherLine) {
                 $homeCompareSpread = $otherLine['homeTeamSpread'];
                 $awayCompareSpread = $otherLine['awayTeamSpread'];
@@ -183,7 +186,7 @@ class GetLines extends Command
                     $casinoKey2 = $casino2['key'];
                     $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
                     $this->alert("Game has a spread Mismatch of $homeDiff");
-                    $simulatedBet = new SimulatedBet(['sharpBookId' => $otherLine['id'], 'nonSharpBookId' => $line['id']]);
+                    $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();
 
                 }

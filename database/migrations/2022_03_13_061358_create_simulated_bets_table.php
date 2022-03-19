@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('simulated_bets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sharpBookId');
-            $table->index('sharpBookId');
-            $table->foreign('sharpBookId')->references('id')->on('casinos')->onDelete('cascade');
+            $table->unsignedBigInteger('sharpBettingLineId');
+            $table->index('sharpBettingLineId');
+            $table->foreign('sharpBettingLineId')->references('id')->on('game_betting_lines')->onDelete('cascade');
 
-            $table->unsignedBigInteger('nonSharpBookId');
-            $table->index('nonSharpBookId');
-            $table->foreign('nonSharpBookId')->references('id')->on('casinos')->onDelete('cascade');
+            $table->unsignedBigInteger('nonSharpBettingLineId');
+            $table->index('nonSharpBettingLineId');
+            $table->foreign('nonSharpBettingLineId')->references('id')->on('game_betting_lines')->onDelete('cascade');
             $table->timestamps();
         });
     }
