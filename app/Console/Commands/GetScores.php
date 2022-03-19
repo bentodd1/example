@@ -43,7 +43,7 @@ class GetScores extends Command
     public function handle()
     {
         $sport = Sport::where('key', 'basketball_ncaab')->first();
-        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/scores/?apiKey=1a12221aff5a1654bb760995fdfea015');
+        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/scores/?apiKey=1a12221aff5a1654bb760995fdfea015&completed=true');
         $games = $response->json();
 
         foreach ($games as $apiGame) {

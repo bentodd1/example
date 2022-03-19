@@ -159,23 +159,17 @@ class GetLines extends Command
         // For now compare with a few casinos.
 
         foreach ($lines as $line) {
-            $this->alert('Inside line loops');
             $homeSpread = $line['homeTeamSpread'];
             $awaySpread = $line['awayTeamSpread'];
             $gameId = $line['gameId'];
             $sharpCasinoIds = SharpCasino::all('casinoId');
-            $this->alert('sharp casinos');
-            $this->alert($sharpCasinoIds);
             $otherLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
-            $this->alert('other lines size');
-            $this->alert(sizeof($otherLines));
             foreach ($otherLines as $otherLine) {
                 $homeCompareSpread = $otherLine['homeTeamSpread'];
                 $awayCompareSpread = $otherLine['awayTeamSpread'];
                 $homeDiff = $homeSpread - $homeCompareSpread;
                 $awayDiff = $awaySpread - $awayCompareSpread;
 
-                //TODO Get casino name and line name.
                 if (abs($homeDiff) > 1.4 || abs($awayDiff) > 1.4) {
                     $game = Game::where('id', $line['gameId'])->first();
                     $homeTeam = $game['homeTeam'];
@@ -186,6 +180,9 @@ class GetLines extends Command
                     $casinoKey2 = $casino2['key'];
                     $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
                     $this->alert("Game has a spread Mismatch of $homeDiff");
+                    $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $homeDiff";
+// send email
+                    mail("someone@example.com","Spread Mismatch",$msg);
                     $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();
 
