@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 //Make the option to do all sports or a single sports
@@ -76,7 +77,13 @@ class GetLines extends Command
      */
     public function handle()
     {
+       // mail("happynowbtodd@gmail.com","Here in handle", "Hello there");
         $sport = Sport::where('key', 'basketball_ncaab')->first();
+        if(!$sport)
+        {
+            $sport = new Sport(['key'=>'basketball_ncaab' ,'group'=>'Basketball' ,'description' => 'US College Basketball','active' =>1,'has_outrights'=>0] );
+            $sport->save();
+        }
         $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/?apiKey=1a12221aff5a1654bb760995fdfea015&regions=us&markets=spreads&oddsFormat=american');
         $allGames = $response->json();
         $newLines = [];
@@ -182,7 +189,7 @@ class GetLines extends Command
                     $this->alert("Game has a spread Mismatch of $homeDiff");
                     $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $homeDiff";
 // send email
-                    mail("someone@example.com","Spread Mismatch",$msg);
+                   // mail("happynowbtodd@gmail.com","Spread Mismatch",$msg);
                     $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();
 

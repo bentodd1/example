@@ -71,6 +71,38 @@
                     @endforeach
                     </tbody>
                 </table>
+
+               <table class="table table-striped task-table">
+
+                  <!-- Table Headings -->
+                    <thead>
+                    <th>&nbsp; Current Simulated Bets</th>
+                    </thead>
+                    <p></p>
+
+                    <!-- Table Body -->
+                    <tbody>
+                    @foreach ($simulatedBets as $simulatedBet)
+                        <tr>
+                            <!-- Task Name -->
+                            <td class="table-text">
+                               <div>{{ $simulatedBet->sharpBettingLineId }}</div>
+                            </td>
+                        <!--
+                            <td>
+                                <form action="{{url('api/task/' . $task->id)}}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+
+                                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                                        <i class="fa fa-btn fa-trash"></i>Delete
+                                    </button>
+                                </form>
+                            </td> -->
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     @endif

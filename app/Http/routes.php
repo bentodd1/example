@@ -1,6 +1,7 @@
 <?php
 
 use App\models\Task;
+use App\models\SimulatedBet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,9 +10,11 @@ use Illuminate\Support\Facades\Route;
  */
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
+    $simulatedBets = SimulatedBet::orderBy('created_at', 'asc')->get();
 
     return view('tasks', [
-        'tasks' => $tasks
+        'tasks' => $tasks,
+        'simulatedBets' => $simulatedBets
     ]);
 });
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\SimulatedBet;
 
 
 /*
@@ -21,9 +22,11 @@ use App\Models\Task;
  */
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
+    $simulatedBets = SimulatedBet::orderBy('created_at', 'asc')->get();
 
     return view('tasks', [
-        'tasks' => $tasks
+        'tasks' => $tasks,
+        'simulatedBets' => $simulatedBets
     ]);
 });
 
