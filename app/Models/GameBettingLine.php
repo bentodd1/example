@@ -16,4 +16,17 @@ class GameBettingLine extends Model
         'awayTeamSpread',
         'isCurrent'
     ];
+
+    public function casino()
+    {
+        return $this->hasOne(Casino::class, 'id','casinoId');
+    }
+
+    public function game()
+    {
+        return $this->belongsTo(Game::class, 'gameId', 'id');
+    }
+
+
+
 }

@@ -15,8 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('GetLines')->everyMinute();
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('GetLines basketball_ncaab')->everyMinute();
+        $schedule->command('GetLines basketball_nba')->everyMinute();
     }
 
     /**

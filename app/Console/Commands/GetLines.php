@@ -29,7 +29,7 @@ class GetLines extends Command
      *
      * @var string
      */
-    protected $signature = 'GetLines';
+    protected $signature = 'GetLines {key}';
 
     /**
      * The console command description.
@@ -77,14 +77,14 @@ class GetLines extends Command
      */
     public function handle()
     {
-       // mail("happynowbtodd@gmail.com","Here in handle", "Hello there");
-        $sport = Sport::where('key', 'basketball_ncaab')->first();
+        $sportType = $this->argument('key');
+        $sport = Sport::where('key', $sportType)->first();
         if(!$sport)
         {
-            $sport = new Sport(['key'=>'basketball_ncaab' ,'group'=>'Basketball' ,'description' => 'US College Basketball','active' =>1,'has_outrights'=>0] );
+            $sport = new Sport(['key'=>$sportType ,'group'=>'Basketball' ,'description' => 'US College Basketball','active' =>1,'has_outrights'=>0] );
             $sport->save();
         }
-        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/?apiKey=1a12221aff5a1654bb760995fdfea015&regions=us&markets=spreads&oddsFormat=american');
+        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/odds/?apiKey=36bd682a540e1d9e705584c352333111&regions=us&markets=spreads&oddsFormat=american");
         $allGames = $response->json();
         $newLines = [];
 
