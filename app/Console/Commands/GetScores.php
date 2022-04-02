@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Game;
 use App\Models\Score;
+use App\Models\SimulatedBet;
 use App\Models\Sport;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -16,7 +17,7 @@ class GetScores extends Command
      *
      * @var string
      */
-    protected $signature = 'GetScores';
+    protected $signature = 'GetScores{key}';
 
     /**
      * The console command description.
@@ -42,8 +43,10 @@ class GetScores extends Command
      */
     public function handle()
     {
-        $sport = Sport::where('key', 'basketball_ncaab')->first();
-        $response = Http::accept('application/json')->get('https://api.the-odds-api.com/v4/sports/basketball_ncaab/scores/?apiKey=1a12221aff5a1654bb760995fdfea015&completed=true');
+        $sportType = $this->argument('key');
+
+        $sport = Sport::where('key', $sportType)->first();
+        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=36bd682a540e1d9e705584c352333111&completed=true");
         $games = $response->json();
 
         foreach ($games as $apiGame) {
@@ -59,11 +62,15 @@ class GetScores extends Command
             $this->alert("Getting game $homeTeam vs $awayTeam");
             $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)->where('commenceTime', $commenceTime)
                 ->first();
-            if($game) {
+            if ($game) {
+                $score = Score::where('gameId', $game['id'])->first();
+                if ($score) {
+                    continue;
+                }
                 $awayTeamScore = 0;
                 $homeTeamScore = 0;
                 $scores = $apiGame['scores'];
-                if($scores) {
+                if ($scores) {
                     foreach ($scores as $score) {
                         if ($score['name'] == $homeTeam) {
                             $homeTeamScore = $score['score'];
@@ -75,15 +82,40 @@ class GetScores extends Command
                     }
                 }
                 $this->alert('Game exists!');
-                $score = new Score(       [ 'gameId' => $game['id'],
+                $score = new Score(['gameId' => $game['id'],
                     'sportId' => $sport['id'],
-                    'homeTeamScore' =>$homeTeamScore,
-                    'awayTeamScore' =>$awayTeamScore,
+                    'homeTeamScore' => $homeTeamScore,
+                    'awayTeamScore' => $awayTeamScore,
                     'lastUpdated' => $lastUpdated,
                     'apiId' => $apiGame['id']]);
                 $score->save();
-            }
-            else {
+                $homeTeamSpread = $awayTeamScore - $homeTeamScore;
+                $simulatedBets = SimulatedBet::where('gameId', $game['id']);
+
+                foreach ($simulatedBets as $simulatedBet) {
+                    $sharpLine = $simulatedBet->sharpLine();
+                    $sharpHomeTeamSpread = $sharpLine['homeTeamSpread'];
+                    $nonSharpLine = $simulatedBet->nonSharpLine();
+                    $nonSharpHomeTeamSpread = $nonSharpLine['awayTeamSpread'];
+                    if ($sharpHomeTeamSpread > $nonSharpHomeTeamSpread) {
+                        if ($homeTeamSpread < $nonSharpHomeTeamSpread) {
+                            $simulatedBet['won'] = true;
+                        } else {
+                            $simulatedBet['won'] = false;
+                        }
+                    }
+                    if($sharpHomeTeamSpread < $nonSharpHomeTeamSpread) {
+                        if ($homeTeamSpread > $nonSharpHomeTeamSpread) {
+                            $simulatedBet['won'] = true;
+                        } else {
+                            $simulatedBet['won'] = false;
+                        }
+
+                    }
+                    $simulatedBet->save();
+                }
+
+            } else {
                 $this->alert('Game does not exists!');
             }
         }
