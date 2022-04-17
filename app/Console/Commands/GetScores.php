@@ -90,7 +90,7 @@ class GetScores extends Command
                     'lastUpdated' => $lastUpdated,
                     'apiId' => $apiGame['id']]);
                 $score->save();
-                $homeTeamSpread = $awayTeamScore - $homeTeamScore;
+                $homeTeamSpread = $scoreService->calculateHomeTeamSpread($score);
                 $simulatedBets = SimulatedBet::where('gameId', $game['id'])->get();
 
                 foreach ($simulatedBets as $simulatedBet) {

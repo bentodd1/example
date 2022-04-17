@@ -7,19 +7,21 @@ use App\Models\Sport;
 use App\Models\Game;
 use App\Models\GameBettingLine;
 use App\Models\SimulatedBet;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Services\ScoreService;
-
 use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
 class ScoreServiceTest extends TestCase
 {
+   // use RefreshDatabase;
+
     public function test_change_won_status(){
         $scoreService = new ScoreService();
         $sport = Sport::where('key','basketball_nba')->first();
 
-        $game = new Game(['sportId' => $sport['id'], 'apiKey' => 'TestKey',
+        $game = new Game(['sportId' => $sport['id'], 'apiKey' => 'test',
             'commenceTime' => '2022-03-07 23:07:01',
             'homeTeam' =>'Flyer','awayTeam' => 'Penguin' ]);
 
@@ -45,11 +47,16 @@ class ScoreServiceTest extends TestCase
             'apiId' => 'test']);
         $score->save();
 
-        $homeTeamSpread = -4;
+        $homeTeamSpread = $scoreService->calculateHomeTeamSpread($score);
 
         $simulatedBet = $scoreService->changeWonStatus($simulatedBet, $homeTeamSpread);
-
+        //$simulatedBet = $scoreService->retroMatchBet($simulatedBet);
         $this->assertEquals(1 , $simulatedBet['won']);
+
+        $homeTeamSpread = -2;
+        $simulatedBet = $scoreService->changeWonStatus($simulatedBet, $homeTeamSpread);
+        $this->assertEquals(0, $simulatedBet['won']);
+
 
 
     }
