@@ -12,7 +12,6 @@ class Game extends Model
         'id',
         'sportId',
         'apiKey',
-        'title',
         'commenceTime',
         'homeTeam',
         'awayTeam'

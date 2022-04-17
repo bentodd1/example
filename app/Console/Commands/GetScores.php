@@ -6,9 +6,9 @@ use App\Models\Game;
 use App\Models\Score;
 use App\Models\SimulatedBet;
 use App\Models\Sport;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use App\Services\ScoreService;
 
 class GetScores extends Command
 {
@@ -48,6 +48,7 @@ class GetScores extends Command
         $sport = Sport::where('key', $sportType)->first();
         $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=36bd682a540e1d9e705584c352333111&completed=true");
         $games = $response->json();
+        $scoreService = new ScoreService();
 
         foreach ($games as $apiGame) {
             $homeTeam = $apiGame['home_team'];
@@ -90,28 +91,10 @@ class GetScores extends Command
                     'apiId' => $apiGame['id']]);
                 $score->save();
                 $homeTeamSpread = $awayTeamScore - $homeTeamScore;
-                $simulatedBets = SimulatedBet::where('gameId', $game['id']);
+                $simulatedBets = SimulatedBet::where('gameId', $game['id'])->get();
 
                 foreach ($simulatedBets as $simulatedBet) {
-                    $sharpLine = $simulatedBet->sharpLine();
-                    $sharpHomeTeamSpread = $sharpLine['homeTeamSpread'];
-                    $nonSharpLine = $simulatedBet->nonSharpLine();
-                    $nonSharpHomeTeamSpread = $nonSharpLine['awayTeamSpread'];
-                    if ($sharpHomeTeamSpread > $nonSharpHomeTeamSpread) {
-                        if ($homeTeamSpread < $nonSharpHomeTeamSpread) {
-                            $simulatedBet['won'] = true;
-                        } else {
-                            $simulatedBet['won'] = false;
-                        }
-                    }
-                    if($sharpHomeTeamSpread < $nonSharpHomeTeamSpread) {
-                        if ($homeTeamSpread > $nonSharpHomeTeamSpread) {
-                            $simulatedBet['won'] = true;
-                        } else {
-                            $simulatedBet['won'] = false;
-                        }
-
-                    }
+                    $simulatedBet = $scoreService->changeWonStatus($simulatedBet, $homeTeamSpread);
                     $simulatedBet->save();
                 }
 

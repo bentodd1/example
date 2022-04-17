@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\SimulatedBet;
+use App\Models\Score;
 
 
 /*
@@ -23,8 +24,30 @@ use App\Models\SimulatedBet;
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
     $simulatedBets = SimulatedBet::orderBy('created_at', 'asc')->get();
+    $scores = Score::orderBy('created_at', 'asc')->get();
+    $scoreSize = count($scores) ;
+    $winCount = 0;
+    $lossCount = 0;
+    foreach ($simulatedBets as $simulatedBet)
+    {
+        if(isset($simulatedBet['won'])) {
+            if ($simulatedBet['won']) {
+                $winCount++;
+            } else if ($simulatedBet['won'] == 0) {
+                $lossCount++;
+            }
+        }
+    }
+    $winRate = 100.00;
+    if($lossCount >0) {
+        $winRate = $winCount/($winCount + $lossCount);
+    }
 
     return view('tasks', [
+        'scoreSize' => $scoreSize,
+        'winCount' => $winCount,
+        'lossCount' => $lossCount,
+        'winrate' => $winRate,
         'tasks' => $tasks,
         'simulatedBets' => $simulatedBets
     ]);

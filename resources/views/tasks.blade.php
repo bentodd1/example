@@ -17,7 +17,7 @@
 
                   <!-- Table Headings -->
                     <thead>
-                    <th>&nbsp; Current Simulated Bets</th>
+                    <th>&nbsp; Current Simulated Bets winrate is {{$winrate}} wins is {{$winCount}} loss is {{$lossCount}} scores is {{$scoreSize}} </th>
                     </thead>
                     <p></p>
 
@@ -34,7 +34,7 @@
                                 <div>{{ $simulatedBet->nonSharpLine->casino->title }} </div>
                                 <div> {{$simulatedBet->nonSharpLine->game->homeTeam }} {{$simulatedBet->nonSharpLine->homeTeamSpread}}</div>
                                 <div>{{$simulatedBet->nonSharpLine->game->awayTeam }} {{$simulatedBet->nonSharpLine->awayTeamSpread}}</div>
-                                <div>-------------------------------------<div>
+                                <div>-------------------------------------</div>
 
                             </td>
                         </tr>

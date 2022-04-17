@@ -9,10 +9,8 @@ use App\Models\SharpCasino;
 use App\Models\SimulatedBet;
 use App\Models\Sport;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 
 //Make the option to do all sports or a single sports
@@ -99,7 +97,7 @@ class GetLines extends Command
                 continue;
             }
             $this->alert("Getting game $homeTeam vs $awayTeam");
-            $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)->where('commenceTime', $commenceTime)
+            $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)->where('apiKey', $apiGame['id'])
                 ->first();
             if (!$game) {
                 $game = new Game(['sportId' => $sport['id'], 'apiKey' => $apiGame['id'], 'homeTeam' => $homeTeam, 'awayTeam' => $awayTeam, 'commenceTime' => $commenceTime]);
