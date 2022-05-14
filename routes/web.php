@@ -19,11 +19,10 @@ use App\Models\Score;
 */
 
 /**
- * Display All Tasks
+ * Display All Bets
  */
 Route::get('/', function () {
-    $tasks = Task::orderBy('created_at', 'asc')->get();
-    $simulatedBets = SimulatedBet::orderBy('created_at', 'asc')->get();
+    $simulatedBets = SimulatedBet::orderBy('created_at', 'desc')->get();
     $scores = Score::orderBy('created_at', 'asc')->get();
     $scoreSize = count($scores) ;
     $winCount = 0;
@@ -48,8 +47,7 @@ Route::get('/', function () {
         'winCount' => $winCount,
         'lossCount' => $lossCount,
         'winrate' => $winRate,
-        'tasks' => $tasks,
-        'simulatedBets' => $simulatedBets
+        'simulatedBets' => $simulatedBets->take(30)
     ]);
 });
 

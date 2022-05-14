@@ -39,13 +39,13 @@ class RetroMatchScores extends Command
      */
     public function handle()
     {
-       // $simulatedBets = SimulatedBet::where(['won' => null])->get();
-        $simulatedBets = SimulatedBet::all();
+        $simulatedBets = SimulatedBet::where(['won' => null])->get();
+       // $simulatedBets = SimulatedBet::all();
         $scoreService = new ScoreService();
         foreach ($simulatedBets as $simulatedBet) {
             $simulatedBet = $scoreService->retroMatchBet($simulatedBet);
             $simulatedBet->save();
         }
-
+        return 1;
     }
 }

@@ -11,12 +11,10 @@ use App\Models\Sport;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Aws\Credentials\Credentials;
+use Aws\Sns\SnsClient;
+use Aws\Exception\AwsException;
 
-
-//Make the option to do all sports or a single sports
-// Don't crash when it can't find certain things.
-// Make job that checks all new lines
-// Make a cron that runs every minute
 // Send an email or text to verify
 
 // DOES NOT WORK when game has alreadtstarted
@@ -48,34 +46,15 @@ class GetLines extends Command
 
     /**
      * Execute the console command.
-     *  "bookmakers": [
-     * {
-     * "key": "draftkings",
-     * "title": "DraftKings",
-     * "last_update": "2022-03-07T01:22:59Z",
-     * "markets": [
-     * {
-     * "key": "spreads",
-     * "outcomes": [
-     * {
-     * "name": "Furman Paladins",
-     * "price": 100,
-     * "point": -2.5
-     * },
-     * {
-     * "name": "Samford Bulldogs",
-     * "price": -130,
-     * "point": 2.5
-     * }
-     * ]
-     * }
-     * ]
      *
      * @return int
      */
     public function handle()
     {
-        $sportType = $this->argument('key');
+            $sportType = $this->argument('key');
+        //$minSpread = 1.4;
+       // $minSpread = $this->argument('minSpread');
+
         $sport = Sport::where('key', $sportType)->first();
         if(!$sport)
         {
@@ -130,7 +109,7 @@ class GetLines extends Command
                         }
                     }
                 }
-                $currentBetLine = GameBettingLine::where('gameId', $game['id'])->where('casinoId', $casino['id'])->where('homeTeamSpread', $homeTeamSpread)->where('awayTeamSpread', $awayTeamSpread)->where('isCurrent', true)->orderBy('updated_at', 'desc')->first();
+                $currentBetLine = GameBettingLine::where('gameId', $game['id'])->where('casinoId', $casino['id'])->where('isCurrent', true)->orderBy('updated_at', 'desc')->first();
                 if (!$currentBetLine) {
 
                     $gameBettingLine = new GameBettingLine(['gameId' => $game['id'], 'casinoId' => $casino['id'], 'homeTeamSpread' => $homeTeamSpread, 'awayTeamSpread' => $awayTeamSpread, 'isCurrent' => true]);
@@ -142,6 +121,7 @@ class GetLines extends Command
                         $gameBettingLine = new GameBettingLine(['gameId' => $game['id'], 'casinoId' => $casino['id'], 'homeTeamSpread' => $homeTeamSpread, 'awayTeamSpread' => $awayTeamSpread, 'isCurrent' => true]);
                         $gameBettingLine->save();
                         $currentBetLine['isCurrent'] = false;
+                        $currentBetLine['expired_time'] = Carbon::now();
                         $currentBetLine->save();
                         $newLines[] = $gameBettingLine;
                     }
@@ -152,14 +132,14 @@ class GetLines extends Command
         $this->alert('Number of new lines');
 
         $this->alert(sizeof($newLines));
-        $this->findLineDifs($newLines);
+        $this->findLineDiffs($newLines);
     }
 
     /**
      * @param GameBettingLine[] $lines
      * add isCurrent
      */
-    public function findLineDifs(array $lines)
+    public function findLineDiffs(array $lines)
     {
         // For now compare with a few casinos.
 
@@ -186,7 +166,29 @@ class GetLines extends Command
                     $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
                     $this->alert("Game has a spread Mismatch of $homeDiff");
                     $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $homeDiff";
-// send email
+                    $SnSclient = new SnsClient([
+                        'version' => '2010-03-31',
+                        'region' => 'us-east-1',
+                        'credentials' => new Credentials(
+                            env('AWS_KEY'),
+                            env('AWS_SECRET')
+
+                        )
+                    ]);
+
+                    $message = $msg;
+                    $phone = '+17203254863';
+
+                    try {
+                        $result = $SnSclient->publish([
+                            'Message' => $message,
+                            'PhoneNumber' => $phone,
+                        ]);
+                    } catch (AwsException $e) {
+                        // output error message if fails
+                        error_log($e->getMessage());
+                    }
+
                    // mail("happynowbtodd@gmail.com","Spread Mismatch",$msg);
                     $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();

@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sns' => [
+        'key' => env('AWS_KEY'),
+        'secret' => env('AWS_SECRET'),
+        'region' => env('us-east-1')
+    ]
+
 ];

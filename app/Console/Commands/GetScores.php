@@ -53,15 +53,12 @@ class GetScores extends Command
         foreach ($games as $apiGame) {
             $homeTeam = $apiGame['home_team'];
             $awayTeam = $apiGame['away_team'];
-            $commenceTime = $apiGame['commence_time'];
-            $commenceTime = str_replace('T', ' ', $commenceTime);
-            $commenceTime = str_replace('Z', '', $commenceTime);
             $lastUpdated = $apiGame['last_update'];
             $lastUpdated = str_replace('T', ' ', $lastUpdated);
             $lastUpdated = str_replace('Z', '', $lastUpdated);
 
             $this->alert("Getting game $homeTeam vs $awayTeam");
-            $game = Game::where('sportId', $sport['id'])->where('homeTeam', $homeTeam)->where('awayTeam', $awayTeam)->where('commenceTime', $commenceTime)
+            $game = Game::where('apiKey', $apiGame['id'])
                 ->first();
             if ($game) {
                 $score = Score::where('gameId', $game['id'])->first();
@@ -90,16 +87,7 @@ class GetScores extends Command
                     'lastUpdated' => $lastUpdated,
                     'apiId' => $apiGame['id']]);
                 $score->save();
-                $homeTeamSpread = $scoreService->calculateHomeTeamSpread($score);
-                $simulatedBets = SimulatedBet::where('gameId', $game['id'])->get();
 
-                foreach ($simulatedBets as $simulatedBet) {
-                    $simulatedBet = $scoreService->changeWonStatus($simulatedBet, $homeTeamSpread);
-                    $simulatedBet->save();
-                }
-
-            } else {
-                $this->alert('Game does not exists!');
             }
         }
 

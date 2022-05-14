@@ -14,7 +14,10 @@ class GameBettingLine extends Model
         'gameId',
         'homeTeamSpread',
         'awayTeamSpread',
-        'isCurrent'
+        'isCurrent',
+        'created_at',
+        'updated_at',
+        'expired_time'
     ];
 
     public function casino()
