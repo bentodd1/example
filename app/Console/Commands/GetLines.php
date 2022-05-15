@@ -15,9 +15,6 @@ use Aws\Credentials\Credentials;
 use Aws\Sns\SnsClient;
 use Aws\Exception\AwsException;
 
-// Send an email or text to verify
-
-// DOES NOT WORK when game has alreadtstarted
 class GetLines extends Command
 {
     /**
@@ -52,8 +49,6 @@ class GetLines extends Command
     public function handle()
     {
             $sportType = $this->argument('key');
-        //$minSpread = 1.4;
-       // $minSpread = $this->argument('minSpread');
 
         $sport = Sport::where('key', $sportType)->first();
         if(!$sport)
