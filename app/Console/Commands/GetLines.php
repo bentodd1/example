@@ -180,11 +180,8 @@ class GetLines extends Command
                             'PhoneNumber' => $phone,
                         ]);
                     } catch (AwsException $e) {
-                        // output error message if fails
                         error_log($e->getMessage());
                     }
-
-                   // mail("happynowbtodd@gmail.com","Spread Mismatch",$msg);
                     $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();
 
