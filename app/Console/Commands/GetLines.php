@@ -182,6 +182,15 @@ class GetLines extends Command
                     } catch (AwsException $e) {
                         error_log($e->getMessage());
                     }
+                    $phone = '+13035178369';
+                    try {
+                        $result = $SnSclient->publish([
+                            'Message' => $message,
+                            'PhoneNumber' => $phone,
+                        ]);
+                    } catch (AwsException $e) {
+                        error_log($e->getMessage());
+                    }
                     $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
                     $simulatedBet->save();
 

@@ -17,8 +17,12 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('GetLines basketball_ncaab')->everyMinute();
         $schedule->command('GetLines basketball_nba')->everyMinute();
+        $schedule->command('GetLines americanfootball_ncaaf')->everyMinute();
+        $schedule->command('GetLines americanfootball_nfl')->everyMinute();
         $schedule->command('GetScores basketball_ncaab')->everyFourHours();
         $schedule->command('GetScores basketball_nba')->everyFourHours();
+        $schedule->command('GetScores americanfootball_ncaaf')->everyFourHours();
+        $schedule->command('GetScores americanfootball_nfl')->everyFourHours();
         $schedule->command('RetroMatchScores')->everySixHours();
 
 

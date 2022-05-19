@@ -7,6 +7,7 @@ use App\Models\Sport;
 use App\Models\Game;
 use App\Models\GameBettingLine;
 use App\Models\SimulatedBet;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Services\ScoreService;
@@ -15,7 +16,7 @@ use Tests\TestCase;
 
 class ScoreServiceTest extends TestCase
 {
-   // use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_change_won_status(){
         $scoreService = new ScoreService();
