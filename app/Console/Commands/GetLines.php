@@ -48,7 +48,7 @@ class GetLines extends Command
      */
     public function handle()
     {
-            $sportType = $this->argument('key');
+        $sportType = $this->argument('key');
 
         $sport = Sport::where('key', $sportType)->first();
         if(!$sport)
@@ -56,7 +56,8 @@ class GetLines extends Command
             $sport = new Sport(['key'=>$sportType ,'group'=>'Basketball' ,'description' => 'US College Basketball','active' =>1,'has_outrights'=>0] );
             $sport->save();
         }
-        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/odds/?apiKey=36bd682a540e1d9e705584c352333111&regions=us&markets=spreads&oddsFormat=american");
+        $apiKey = env('ODDS_API_KEY');
+        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/odds/?apiKey=$apiKey&regions=us&markets=spreads&oddsFormat=american");
         $allGames = $response->json();
         $newLines = [];
 
