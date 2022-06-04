@@ -121,8 +121,6 @@ class GetLinesService
         $casinoKey = $casino['key'];
         $casino2 = Casino::where('id', $sharpBettingLine['casinoId'])->first();
         $casinoKey2 = $casino2['key'];
-       // $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
-       // $this->alert("Game has a spread Mismatch of $homeDiff");
         $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $spreadMismatch";
         $this->sendTextMessage($msg, '+17203254863');
         $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $sharpBettingLine['id'], 'nonSharpBettingLineId' => $nonSharpLine['id']]);

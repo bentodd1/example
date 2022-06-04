@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Services;
 
 use App\Models\Score;
 use App\Models\Sport;
@@ -8,10 +8,8 @@ use App\Models\Game;
 use App\Models\GameBettingLine;
 use App\Models\SimulatedBet;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Services\ScoreService;
-use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
 class ScoreServiceTest extends TestCase

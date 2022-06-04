@@ -24,4 +24,21 @@ class SimulatedBet extends Model
     {
         return $this->hasOne(GameBettingLine::class, 'id', 'nonSharpBettingLineId');
     }
+
+    public function getBettingSide(){
+
+        $sharpLine = $this->sharpLine()->first();
+        $nonSharpLine = $this->nonSharpLine()->first();
+        $sharpHomeTeamSpread = $sharpLine['homeTeamSpread'];
+        $nonSharpHomeTeamSpread = $nonSharpLine['homeTeamSpread'];
+
+        if ($sharpHomeTeamSpread > $nonSharpHomeTeamSpread) {
+            return 'awayTeam';
+        }
+        if ($sharpHomeTeamSpread < $nonSharpHomeTeamSpread) {
+            return 'homeTeam';
+
+        }
+    }
+
 }

@@ -159,9 +159,18 @@ class GetLines extends Command
                     $casinoKey = $casino['key'];
                     $casino2 = Casino::where('id', $otherLine['casinoId'])->first();
                     $casinoKey2 = $casino2['key'];
+
+                    $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
+                    $simulatedBet->save();
+                    $bettingSide  = $simulatedBet->getBettingSide();
+                    $bettingSideName = $homeTeam;
+                    if($bettingSide == 'awayTeam') {
+                        $bettingSideName = $awayTeam;
+                    }
+                    $lineAmmount = $simulatedBet->nonSharpLine()->first()['homeTeamSpread'];
                     $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
                     $this->alert("Game has a spread Mismatch of $homeDiff");
-                    $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $homeDiff";
+                    $msg = "$casinoKey different than $casinoKey2 for $homeTeam amount $lineAmmount vs $awayTeam" . "Spread Mismatch of $homeDiff Betting side $bettingSideName";
                     $SnSclient = new SnsClient([
                         'version' => '2010-03-31',
                         'region' => 'us-east-1',
@@ -183,17 +192,6 @@ class GetLines extends Command
                     } catch (AwsException $e) {
                         error_log($e->getMessage());
                     }
-                    $phone = '+13035178369';
-                    try {
-                        $result = $SnSclient->publish([
-                            'Message' => $message,
-                            'PhoneNumber' => $phone,
-                        ]);
-                    } catch (AwsException $e) {
-                        error_log($e->getMessage());
-                    }
-                    $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
-                    $simulatedBet->save();
 
                 }
             }
