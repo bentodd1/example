@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
+use App\Models\NonSharpCasino;
 use App\Models\SharpCasino;
 use App\Models\SimulatedBet;
 use App\Models\Sport;
@@ -119,6 +120,7 @@ class GetLines extends Command
                         $currentBetLine['isCurrent'] = false;
                         $currentBetLine['expired_time'] = Carbon::now();
                         $currentBetLine->save();
+
                         $newLines[] = $gameBettingLine;
                     }
                 }
@@ -128,6 +130,7 @@ class GetLines extends Command
         $this->alert('Number of new lines');
 
         $this->alert(sizeof($newLines));
+        //
         $this->findLineDiffs($newLines);
     }
 
@@ -138,8 +141,18 @@ class GetLines extends Command
     public function findLineDiffs(array $lines)
     {
         // For now compare with a few casinos.
+        $nonSharpCasinos = NonSharpCasino::all('casinoId')->toArray();
+        $nonSharpCasinoIds =[];
+        foreach($nonSharpCasinos as $nonSharpCasino){
+            $nonSharpCasinoIds[] = $nonSharpCasino['casinoId'];
+        }
 
         foreach ($lines as $line) {
+            if(!in_array($line['casinoId'], $nonSharpCasinoIds))
+            {
+                continue;
+            }
+
             $homeSpread = $line['homeTeamSpread'];
             $awaySpread = $line['awayTeamSpread'];
             $gameId = $line['gameId'];
