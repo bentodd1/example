@@ -55,22 +55,6 @@ class GetLinesService
 
         }
     }
-    public function compareTwoLines(GameBettingLine $line, GameBettingLine $sharpBettingLine, float $minDifference= 1.4): void
-    {
-        $homeSpread = $line['homeTeamSpread'];
-        $awaySpread = $line['awayTeamSpread'];
-
-        $homeCompareSpread = $sharpBettingLine['homeTeamSpread'];
-        $awayCompareSpread = $sharpBettingLine['awayTeamSpread'];
-        $homeDiff = $homeSpread - $homeCompareSpread;
-        $awayDiff = $awaySpread - $awayCompareSpread;
-
-        if (abs($homeDiff) > $minDifference || abs($awayDiff) > $minDifference) {
-            $this->handleSpreadMismatch($line, $sharpBettingLine, $homeDiff);
-
-        }
-
-    }
 
     public function hasSpreadMismatch(GameBettingLine $line, GameBettingLine $sharpBettingLine, float $minDifference = 1.4)
     {
@@ -122,9 +106,16 @@ class GetLinesService
         $casino2 = Casino::where('id', $sharpBettingLine['casinoId'])->first();
         $casinoKey2 = $casino2['key'];
         $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $spreadMismatch";
-        $this->sendTextMessage($msg, '+17203254863');
+        if($this->shouldSend()) {
+            $this->sendTextMessage($msg, '+17203254863');
+        }
         $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $sharpBettingLine['id'], 'nonSharpBettingLineId' => $nonSharpLine['id']]);
         $simulatedBet->save();
+    }
+
+    public function shouldSend(): bool
+    {
+        return env('NOTIFICATIONS_ON');
     }
 
 }

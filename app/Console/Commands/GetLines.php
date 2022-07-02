@@ -9,6 +9,7 @@ use App\Models\NonSharpCasino;
 use App\Models\SharpCasino;
 use App\Models\SimulatedBet;
 use App\Models\Sport;
+use App\Services\GetLinesService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
@@ -130,85 +131,9 @@ class GetLines extends Command
         $this->alert('Number of new lines');
 
         $this->alert(sizeof($newLines));
-        //
-        $this->findLineDiffs($newLines);
+        $scoreService = new GetLinesService();
+        $scoreService->findLineDiffs($newLines);
     }
 
-    /**
-     * @param GameBettingLine[] $lines
-     * add isCurrent
-     */
-    public function findLineDiffs(array $lines)
-    {
-        // For now compare with a few casinos.
-        $nonSharpCasinos = NonSharpCasino::all('casinoId')->toArray();
-        $nonSharpCasinoIds =[];
-        foreach($nonSharpCasinos as $nonSharpCasino){
-            $nonSharpCasinoIds[] = $nonSharpCasino['casinoId'];
-        }
 
-        foreach ($lines as $line) {
-            if(!in_array($line['casinoId'], $nonSharpCasinoIds))
-            {
-                continue;
-            }
-
-            $homeSpread = $line['homeTeamSpread'];
-            $awaySpread = $line['awayTeamSpread'];
-            $gameId = $line['gameId'];
-            $sharpCasinoIds = SharpCasino::all('casinoId');
-            $otherLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
-            foreach ($otherLines as $otherLine) {
-                $homeCompareSpread = $otherLine['homeTeamSpread'];
-                $awayCompareSpread = $otherLine['awayTeamSpread'];
-                $homeDiff = $homeSpread - $homeCompareSpread;
-                $awayDiff = $awaySpread - $awayCompareSpread;
-
-                if (abs($homeDiff) > 1.4 || abs($awayDiff) > 1.4) {
-                    $game = Game::where('id', $line['gameId'])->first();
-                    $homeTeam = $game['homeTeam'];
-                    $awayTeam = $game['awayTeam'];
-                    $casino = Casino::where('id', $line['casinoId'])->first();
-                    $casinoKey = $casino['key'];
-                    $casino2 = Casino::where('id', $otherLine['casinoId'])->first();
-                    $casinoKey2 = $casino2['key'];
-
-                    $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $otherLine['id'], 'nonSharpBettingLineId' => $line['id']]);
-                    $simulatedBet->save();
-                    $bettingSide  = $simulatedBet->getBettingSide();
-                    $bettingSideName = $homeTeam;
-                    if($bettingSide == 'awayTeam') {
-                        $bettingSideName = $awayTeam;
-                    }
-                    $lineAmmount = $simulatedBet->nonSharpLine()->first()['homeTeamSpread'];
-                    $this->alert("$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam");
-                    $this->alert("Game has a spread Mismatch of $homeDiff");
-                    $msg = "$casinoKey different than $casinoKey2 for $homeTeam amount $lineAmmount vs $awayTeam" . "Spread Mismatch of $homeDiff Betting side $bettingSideName";
-                    $SnSclient = new SnsClient([
-                        'version' => '2010-03-31',
-                        'region' => 'us-east-1',
-                        'credentials' => new Credentials(
-                            env('AWS_KEY'),
-                            env('AWS_SECRET')
-
-                        )
-                    ]);
-
-                    $message = $msg;
-                    $phone = '+17203254863';
-
-                    try {
-                        $result = $SnSclient->publish([
-                            'Message' => $message,
-                            'PhoneNumber' => $phone,
-                        ]);
-                    } catch (AwsException $e) {
-                        error_log($e->getMessage());
-                    }
-
-                }
-            }
-
-        }
-    }
 }
