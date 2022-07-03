@@ -46,51 +46,60 @@ class GetScores extends Command
         $sportType = $this->argument('key');
 
         $sport = Sport::where('key', $sportType)->first();
-        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=36bd682a540e1d9e705584c352333111&completed=true");
+        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=36bd682a540e1d9e705584c352333111&daysFrom=2");
         $games = $response->json();
-        $scoreService = new ScoreService();
+
+        //$scoreService->
 
         foreach ($games as $apiGame) {
-            $homeTeam = $apiGame['home_team'];
-            $awayTeam = $apiGame['away_team'];
-            $lastUpdated = $apiGame['last_update'];
-            $lastUpdated = str_replace('T', ' ', $lastUpdated);
-            $lastUpdated = str_replace('Z', '', $lastUpdated);
+            if ($apiGame['completed']) {
+                $homeTeam = $apiGame['home_team'];
+                $awayTeam = $apiGame['away_team'];
+                $lastUpdated = $apiGame['last_update'];
+                $lastUpdated = str_replace('T', ' ', $lastUpdated);
+                $lastUpdated = str_replace('Z', '', $lastUpdated);
 
-            $this->alert("Getting game $homeTeam vs $awayTeam");
-            $game = Game::where('apiKey', $apiGame['id'])
-                ->first();
-            if ($game) {
-                $score = Score::where('gameId', $game['id'])->first();
-                if ($score) {
-                    continue;
+                $this->alert("Getting game $homeTeam vs $awayTeam");
+                $game = Game::where('apiKey', $apiGame['id'])
+                    ->first();
+                if (!$game) {
+                    $commenceTime = $apiGame['commence_time'];
+                    $commenceTime = str_replace('T', ' ', $commenceTime);
+                    $commenceTime = str_replace('Z', '', $commenceTime);
+                    $game = new Game(['sportId' => $sport['id'], 'apiKey' => $apiGame['id'], 'homeTeam' => $homeTeam, 'awayTeam' => $awayTeam, 'commenceTime' => $commenceTime]);
+                    $game->save();
                 }
-                $awayTeamScore = 0;
-                $homeTeamScore = 0;
-                $scores = $apiGame['scores'];
-                if ($scores) {
-                    foreach ($scores as $score) {
-                        if ($score['name'] == $homeTeam) {
-                            $homeTeamScore = $score['score'];
-                        }
-                        if ($score['name'] == $awayTeam) {
-                            $awayTeamScore = $score['score'];
-                        }
-
+                if ($game) {
+                    $score = Score::where('gameId', $game['id'])->first();
+                    if ($score) {
+                        continue;
                     }
-                }
-                $this->alert('Game exists!');
-                $score = new Score(['gameId' => $game['id'],
-                    'sportId' => $sport['id'],
-                    'homeTeamScore' => $homeTeamScore,
-                    'awayTeamScore' => $awayTeamScore,
-                    'lastUpdated' => $lastUpdated,
-                    'apiId' => $apiGame['id']]);
-                $score->save();
+                    $awayTeamScore = 0;
+                    $homeTeamScore = 0;
+                    $scores = $apiGame['scores'];
+                    if ($scores) {
+                        foreach ($scores as $score) {
+                            if ($score['name'] == $homeTeam) {
+                                $homeTeamScore = $score['score'];
+                            }
+                            if ($score['name'] == $awayTeam) {
+                                $awayTeamScore = $score['score'];
+                            }
 
+                        }
+                    }
+                    $this->alert('Game exists!');
+                    $score = new Score(['gameId' => $game['id'],
+                        'sportId' => $sport['id'],
+                        'homeTeamScore' => $homeTeamScore,
+                        'awayTeamScore' => $awayTeamScore,
+                        'lastUpdated' => $lastUpdated,
+                        'apiId' => $apiGame['id']]);
+                    $score->save();
+
+                }
             }
         }
-
         return 0;
     }
 }

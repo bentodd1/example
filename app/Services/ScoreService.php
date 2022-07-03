@@ -46,7 +46,8 @@ class ScoreService
         $score = Score::where(['apiId' => $game['apiKey']])->first();
         if($score) {
             $homeTeamSpread = $this->calculateHomeTeamSpread($score);
-            $this->changeWonStatus($simulatedBet, $homeTeamSpread );
+            $simulatedBet['scoreId'] = $score['id'];
+            $this->changeWonStatus($simulatedBet, $homeTeamSpread);
         }
         return $simulatedBet;
 
