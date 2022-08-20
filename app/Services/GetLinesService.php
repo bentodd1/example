@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
+use App\Models\NonSharpCasino;
 use App\Models\SharpCasino;
 use App\Models\SimulatedBet;
 use Aws\Credentials\Credentials;
@@ -41,14 +42,23 @@ class GetLinesService
     public function findLineDiffs(array $lines)
     {
         // For now compare with a few casinos.
+        $nonSharpCasinos = NonSharpCasino::all('casinoId')->toArray();
+        $nonSharpCasinoIds = [];
+        foreach ($nonSharpCasinos as $nonSharpCasino) {
+            $nonSharpCasinoIds[] = $nonSharpCasino['casinoId'];
+        }
 
         foreach ($lines as $line) {
+            if (!in_array($line['casinoId'], $nonSharpCasinoIds)) {
+                continue;
+            }
             $gameId = $line['gameId'];
             $sharpCasinoIds = SharpCasino::all('casinoId');
             $sharpCasinoLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
             foreach ($sharpCasinoLines as $sharpCasinoLine) {
-                if($this->hasSpreadMismatch($line, $sharpCasinoLine)){
-                    $this->handleSpreadMismatch($line, $sharpCasinoLine, 0 );
+                $spreadMismatch = $this->getSpreadMismatch($line, $sharpCasinoLine);
+                if ($spreadMismatch > 1.4) {
+                    $this->handleSpreadMismatch($line, $sharpCasinoLine);
                 }
 
             }
@@ -73,8 +83,17 @@ class GetLinesService
         return false;
     }
 
+    public function getSpreadMismatch(GameBettingLine $line, GameBettingLine $sharpBettingLine): float
+    {
+        $homeSpread = $line['homeTeamSpread'];
+        $homeCompareSpread = $sharpBettingLine['homeTeamSpread'];
+        $homeDiff = $homeSpread - $homeCompareSpread;
+        return abs($homeDiff);
+    }
 
-    public function sendTextMessage(string $message, string $phone){
+
+    public function sendTextMessage(string $message, string $phone)
+    {
         $SnSclient = new SnsClient([
             'version' => '2010-03-31',
             'region' => 'us-east-1',
@@ -96,7 +115,8 @@ class GetLinesService
     }
 
 
-    public function handleSpreadMismatch(GameBettingLine $nonSharpLine, GameBettingLine $sharpBettingLine){
+    public function handleSpreadMismatch(GameBettingLine $nonSharpLine, GameBettingLine $sharpBettingLine)
+    {
         $spreadMismatch = $sharpBettingLine['homeTeamSpread'] - $nonSharpLine['homeTeamSpread'];
         $game = Game::where('id', $nonSharpLine['gameId'])->first();
         $homeTeam = $game['homeTeam'];
@@ -105,12 +125,19 @@ class GetLinesService
         $casinoKey = $casino['key'];
         $casino2 = Casino::where('id', $sharpBettingLine['casinoId'])->first();
         $casinoKey2 = $casino2['key'];
-        $msg = "$casinoKey different than $casinoKey2 for $homeTeam vs $awayTeam" . "Game has a spread Mismatch of $spreadMismatch";
-        if($this->shouldSend()) {
-            $this->sendTextMessage($msg, '+17203254863');
-        }
+
         $simulatedBet = new SimulatedBet(['sharpBettingLineId' => $sharpBettingLine['id'], 'nonSharpBettingLineId' => $nonSharpLine['id']]);
         $simulatedBet->save();
+        $bettingSide  = $simulatedBet->getBettingSide();
+        $bettingSideName = $homeTeam;
+        $lineAmmount = $simulatedBet->nonSharpLine()->first()['homeTeamSpread'];
+        if($bettingSide == 'awayTeam') {
+            $bettingSideName = $awayTeam;
+        }
+        $msg = "$casinoKey different than $casinoKey2 for $homeTeam amount $lineAmmount vs $awayTeam" . "Spread Mismatch of $spreadMismatch Betting side $bettingSideName";
+        if ($this->shouldSend()) {
+            $this->sendTextMessage($msg, '+17203254863');
+        }
     }
 
     public function shouldSend(): bool
