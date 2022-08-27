@@ -1,5 +1,5 @@
-select games.homeTeam, games.awayTeam,games.commenceTime, c.title,
-       gbl.homeTeamSpread, gbl.awayTeamSpread, c2.title, g.homeTeamSpread, g.awayTeamSpread
+select simulated_bets.created_at as createdDate, games.homeTeam, games.awayTeam,games.commenceTime, c.title,
+       gbl.homeTeamSpread as nonSharpHomeSpread, gbl.awayTeamSpread as nonSharpAwaySpread, c2.title, g.homeTeamSpread as sharpHomeSread, g.awayTeamSpread as sharpAwayTeamSpread
 from simulated_bets
     join game_betting_lines gbl on simulated_bets.nonSharpBettingLineId = gbl.id
     join game_betting_lines g on g.id = simulated_bets.sharpBettingLineId
