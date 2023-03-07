@@ -30,6 +30,18 @@ class GameBettingLine extends Model
         return $this->belongsTo(Game::class, 'gameId', 'id');
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($simulatedBet) {
+            if ($simulatedBet->isDirty('end_date')) {
+                $duration = $simulatedBet->end_date->diffInSeconds($simulatedBet->created_at);
+                $simulatedBet->duration = $duration;
+            }
+        });
+    }
+
 
 
 }

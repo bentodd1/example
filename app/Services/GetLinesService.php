@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
-use App\Models\NonSharpCasino;
-use App\Models\SharpCasino;
+use App\Models\UsedSportsBooks;
 use App\Models\SimulatedBet;
 use Aws\Credentials\Credentials;
 use Aws\Exception\AwsException;
@@ -42,23 +41,22 @@ class GetLinesService
     public function findLineDiffs(array $lines)
     {
         // For now compare with a few casinos.
-        $nonSharpCasinos = NonSharpCasino::all('casinoId')->toArray();
-        $nonSharpCasinoIds = [];
-        foreach ($nonSharpCasinos as $nonSharpCasino) {
-            $nonSharpCasinoIds[] = $nonSharpCasino['casinoId'];
+        $usedCasinos1 = UsedSportsBooks::all('casinoId')->toArray();
+        $usedCasinoIds = [];
+        foreach ($usedCasinos1 as $usedCasino) {
+            $usedCasinoIds[] = $usedCasino['casinoId'];
         }
 
         foreach ($lines as $line) {
-            if (!in_array($line['casinoId'], $nonSharpCasinoIds)) {
+            if (!in_array($line['casinoId'], $usedCasinoIds)) {
                 continue;
             }
             $gameId = $line['gameId'];
-            $sharpCasinoIds = SharpCasino::all('casinoId');
-            $sharpCasinoLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $sharpCasinoIds)->get();
-            foreach ($sharpCasinoLines as $sharpCasinoLine) {
-                $spreadMismatch = $this->getSpreadMismatch($line, $sharpCasinoLine);
+            $usedCasinoLines = GameBettingLine::where('gameId', $gameId)->where('isCurrent', true)->whereIn('casinoId', $usedCasinoIds)->get();
+            foreach ($usedCasinoLines as $usedCasinoLine) {
+                $spreadMismatch = $this->getSpreadMismatch($line, $usedCasinoLine);
                 if ($spreadMismatch > 1.4) {
-                    $this->handleSpreadMismatch($line, $sharpCasinoLine);
+                    $this->handleSpreadMismatch($line, $usedCasinoLine);
                 }
 
             }
@@ -114,6 +112,7 @@ class GetLinesService
         }
     }
 
+    // Sharp Betting Line is just line that changed.
 
     public function handleSpreadMismatch(GameBettingLine $nonSharpLine, GameBettingLine $sharpBettingLine)
     {
@@ -130,13 +129,47 @@ class GetLinesService
         $simulatedBet->save();
         $bettingSide  = $simulatedBet->getBettingSide();
         $bettingSideName = $homeTeam;
-        $lineAmmount = $simulatedBet->nonSharpLine()->first()['homeTeamSpread'];
+        $lineAmmount = $simulatedBet->movingLine()->first()['homeTeamSpread'];
         if($bettingSide == 'awayTeam') {
             $bettingSideName = $awayTeam;
         }
         $msg = "$casinoKey different than $casinoKey2 for $homeTeam amount $lineAmmount vs $awayTeam" . "Spread Mismatch of $spreadMismatch Betting side $bettingSideName";
         if ($this->shouldSend()) {
             $this->sendTextMessage($msg, '+17203254863');
+        }
+    }
+
+    /**
+     * Compares the new lines to the current sharp casino lines.
+     * @param GameBettingLine[] $lines
+     */
+    public function findHistoricalLineDiffs(array $lines)
+    {
+        // For now compare with a few casinos.
+        $usedCasinos1 = UsedSportsBooks::all('casinoId')->toArray();
+        $usedCasinoIds = [];
+        foreach ($usedCasinos1 as $usedCasino) {
+            $usedCasinoIds[] = $usedCasino['casinoId'];
+        }
+
+        foreach ($lines as $line) {
+            if (!in_array($line['casinoId'], $usedCasinoIds)) {
+                continue;
+            }
+            foreach ($lines as $otherLine) {
+                if (!in_array($otherLine['casinoId'], $usedCasinoIds)) {
+                    continue;
+                }
+                if($line['gameId'] != $otherLine['gameId'] ){
+                    continue;
+                }
+                $spreadMismatch = $this->getSpreadMismatch($line, $otherLine);
+                if ($spreadMismatch > 1.4) {
+                    $this->handleSpreadMismatch($line, $otherLine);
+                }
+
+            }
+
         }
     }
 

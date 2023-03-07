@@ -8,4 +8,5 @@ from simulated_bets
     join games on gbl.gameId = games.id
 where won is null and gbl.isCurrent = 1 and g.isCurrent = 1
 and gbl.casinoId in (1,2,16)
+and g.casinoId = 4
 order by simulated_bets.created_at desc;

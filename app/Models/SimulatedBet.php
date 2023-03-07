@@ -12,23 +12,25 @@ class SimulatedBet extends Model
         'id',
         'won',
         'sharpBettingLineId',
-        'nonSharpBettingLineId'
+        'nonSharpBettingLineId',
+        'end_date',
+        'duration'
     ];
 
-    public function sharpLine()
+    public function originalLine()
     {
          return $this->hasOne(GameBettingLine::class, 'id','sharpBettingLineId');
     }
 
-    public function nonSharpLine()
+    public function movingLine()
     {
         return $this->hasOne(GameBettingLine::class, 'id', 'nonSharpBettingLineId');
     }
 
     public function getBettingSide(){
 
-        $sharpLine = $this->sharpLine()->first();
-        $nonSharpLine = $this->nonSharpLine()->first();
+        $sharpLine = $this->originalLine()->first();
+        $nonSharpLine = $this->movingLine()->first();
         $sharpHomeTeamSpread = $sharpLine['homeTeamSpread'];
         $nonSharpHomeTeamSpread = $nonSharpLine['homeTeamSpread'];
 
@@ -39,6 +41,18 @@ class SimulatedBet extends Model
             return 'homeTeam';
 
         }
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($simulatedBet) {
+            if ($simulatedBet->isDirty('end_date')) {
+                $duration = $simulatedBet->end_date->diffInSeconds($simulatedBet->created_at);
+                $simulatedBet->duration = $duration;
+            }
+        });
     }
 
 }

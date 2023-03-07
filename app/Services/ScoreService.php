@@ -13,9 +13,9 @@ class ScoreService
 
     public function changeWonStatus(SimulatedBet $simulatedBet, $homeTeamSpread): SimulatedBet
     {
-        $sharpLine = $simulatedBet->sharpLine()->first();
+        $sharpLine = $simulatedBet->originalLine()->first();
         $sharpHomeTeamSpread = $sharpLine['homeTeamSpread'];
-        $nonSharpLine = $simulatedBet->nonSharpLine()->first();
+        $nonSharpLine = $simulatedBet->movingLine()->first();
         $nonSharpHomeTeamSpread = $nonSharpLine['homeTeamSpread'];
         Log::debug("Sharphome team spread $sharpHomeTeamSpread");
         Log::debug("NonSharphome team spread $nonSharpHomeTeamSpread");
@@ -41,7 +41,7 @@ class ScoreService
     }
 
     public function retroMatchBet(SimulatedBet $simulatedBet): SimulatedBet{
-        $sharpLine = $simulatedBet->sharpLine()->first();
+        $sharpLine = $simulatedBet->originalLine()->first();
         $game = $sharpLine->game()->first();
         $score = Score::where(['apiId' => $game['apiKey']])->first();
         if($score) {

@@ -46,7 +46,7 @@ class GetScores extends Command
         $sportType = $this->argument('key');
 
         $sport = Sport::where('key', $sportType)->first();
-        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=36bd682a540e1d9e705584c352333111&daysFrom=2");
+        $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sportType/scores/?apiKey=0e799a93e51b4c76d5ca762a7054aa00&daysFrom=2");
         $games = $response->json();
 
         //$scoreService->
