@@ -10,14 +10,14 @@ use DOMXPath;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ExtractScoresFromEspn extends Command
+class ExtractNbaScoresFromEspn extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'ExtractFromEspn';
+    protected $signature = 'ExtractNbaFromEspn';
 
     /**
      * The console command description.
@@ -111,13 +111,13 @@ class ExtractScoresFromEspn extends Command
                     ->getElementsByTagName('div')[0]
                     ->textContent;
 
-                $awayScoreElement = $awayLi->getElementsByTagName('div')[7];
+                $awayScoreElement = $awayLi->getElementsByTagName('div')[9];
 
             $homeTeamName = $homeLi->getElementsByTagName('div')[0]
                 ->getElementsByTagName('div')[0]
                 ->textContent;
 
-            $homeScoreElement = $homeLi->getElementsByTagName('div')[7];
+            $homeScoreElement = $homeLi->getElementsByTagName('div')[9];
                 if(!$awayScoreElement || !$homeScoreElement) {
                     continue;
                 }

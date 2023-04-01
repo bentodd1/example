@@ -147,6 +147,8 @@ class GetLinesService
     {
         // For now compare with a few casinos.
         $usedCasinos1 = UsedSportsBooks::all('casinoId')->toArray();
+
+        $pinnacle = [16];
         $usedCasinoIds = [];
         foreach ($usedCasinos1 as $usedCasino) {
             $usedCasinoIds[] = $usedCasino['casinoId'];

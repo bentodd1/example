@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Models\Casino;
 use App\Models\Game;
 use App\Models\GameBettingLine;
@@ -70,7 +69,7 @@ class AddHistoricalLines extends Command
     }
 
     public function fetchResponseFromHistory(string $sport, $date ){
-        $fetchString = "https://api.the-odds-api.com/v4/sports/$sport/odds-history/?apiKey=a1afa0961f51b8fef9289253c9dfb21f&regions=us&markets=spreads&oddsFormat=american&date=$date";
+        $fetchString = "https://api.the-odds-api.com/v4/sports/$sport/odds-history/?apiKey=a1afa0961f51b8fef9289253c9dfb21f&regions=eu&markets=spreads&oddsFormat=american&date=$date";
         $response = Http::accept('application/json')->get("https://api.the-odds-api.com/v4/sports/$sport/odds-history/?apiKey=a1afa0961f51b8fef9289253c9dfb21f&regions=us&markets=spreads&oddsFormat=american&date=$date");
         return $response;
     }
