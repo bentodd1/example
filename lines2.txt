@@ -1,0 +1,162 @@
+Home team Vanderbilt Commodores away team is UAB Blazers time is 2023-03-22T23:00:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Middle Tennessee Blue Raiders away team is Florida Int'l Golden Panthers time is 2021-01-09T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team Chattanooga Mocs away team is Mercer Bears time is 2021-01-14T00:00:00Z 
+Pinnacle Line 1 Draft kings line -1 lost
+Home team Oklahoma Sooners away team is Alabama Crimson Tide time is 2021-01-30T17:00:00Z 
+Pinnacle Line 1.5 Draft kings line -1 lost
+Home team Rhode Island Rams away team is VCU Rams time is 2021-02-04T00:00:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Virginia Cavaliers away team is Pittsburgh Panthers time is 2021-02-06T21:00:00Z 
+Pinnacle Line -10 Draft kings line -11.5 won
+Home team UC Riverside Highlanders away team is UC Irvine Anteaters time is 2021-02-14T05:00:00Z 
+Pinnacle Line 1.5 Draft kings line 5.5 lost
+Home team Oklahoma St Cowboys away team is Oklahoma Sooners time is 2021-03-02T02:00:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team Michigan St Spartans away team is Michigan Wolverines time is 2021-03-07T21:30:00Z 
+Pinnacle Line -7.5 Draft kings line -9 won
+Home team Maryland Terrapins away team is Michigan St Spartans time is 2021-03-11T16:30:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team Cal Baptist Lancers away team is Seattle Redhawks time is 2021-03-12T00:30:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Utah State Aggies away team is Colorado St Rams time is 2021-03-13T05:00:00Z 
+Pinnacle Line -5.5 Draft kings line -7 won
+Home team Kansas Jayhawks away team is USC Trojans time is 2021-03-22T17:00:00Z 
+Pinnacle Line -1.5 Draft kings line 0.5 lost
+Home team Kansas Jayhawks away team is USC Trojans time is 2021-03-23T01:40:00Z 
+Pinnacle Line 1 Draft kings line -1  won 
+Home team Eastern Michigan Eagles away team is Illinois St Redbirds time is 2021-11-12T23:00:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team Hawai'i Rainbow Warriors away team is Pacific Tigers time is 2021-11-14T05:22:01Z 
+Pinnacle Line 4 Draft kings line 8.5 won
+Home team UNLV Rebels away team is Wichita St Shockers time is 2021-11-22T05:05:00Z 
+Pinnacle Line 3 Draft kings line 0.5 lost
+Home team Louisville Cardinals away team is Maryland Terrapins time is 2021-11-27T15:00:00Z 
+Pinnacle Line 1 Draft kings line -1 lost
+Home team Green Bay Phoenix away team is Robert Morris Colonials time is 2021-12-03T01:00:00Z 
+Pinnacle Line -1.5 Draft kings line 1 won
+Home team Canisius Golden Griffins away team is Fairfield Stags time is 2021-12-04T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1.5 lost
+Home team Western Carolina Catamounts away team is Tennessee Tech Golden Eagles time is 2021-12-09T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team SIU-Edwardsville Cougars away team is UMKC Kangaroos time is 2021-12-12T20:00:00Z 
+Pinnacle Line 1 Draft kings line -1 lost
+Home team Hawai'i Rainbow Warriors away team is Vanderbilt Commodores time is 2021-12-23T05:00:00Z 
+Pinnacle Line -10.5 Draft kings line -12.5 lost
+Home team Hawai'i Rainbow Warriors away team is South Florida Bulls time is 2021-12-24T05:22:12Z 
+Pinnacle Line -5 Draft kings line 1.5 lost
+Home team Xavier Musketeers away team is Villanova Wildcats time is 2022-01-12T23:30:00Z 
+Pinnacle Line -1 Draft kings line 1 lost
+Home team Hawai'i Rainbow Warriors away team is UC Irvine Anteaters time is 2022-01-14T05:07:39Z 
+Pinnacle Line -5 Draft kings line 19.5 won
+Home team Tennessee St Tigers away team is Tennessee Tech Golden Eagles time is 2022-01-17T19:00:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team South Dakota Coyotes away team is North Dakota St Bison time is 2022-01-28T01:00:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Fresno St Bulldogs away team is Boise State Broncos time is 2022-01-29T04:00:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Iowa State Cyclones away team is Missouri Tigers time is 2022-01-29T19:00:00Z 
+Pinnacle Line 9 Draft kings line 10.5 lost
+Home team Hawai'i Rainbow Warriors away team is UC Santa Barbara Gauchos time is 2022-01-30T05:08:31Z 
+Pinnacle Line 2 Draft kings line 5.5 won
+Home team UC Santa Barbara Gauchos away team is UC Irvine Anteaters time is 2022-02-04T03:00:00Z 
+Pinnacle Line -1 Draft kings line 1 lost
+Home team Air Force Falcons away team is New Mexico Lobos time is 2022-02-06T01:00:00Z 
+Pinnacle Line 1 Draft kings line -1 won
+Home team Hawai'i Rainbow Warriors away team is Long Beach St 49ers time is 2022-02-11T05:07:40Z 
+Pinnacle Line 4 Draft kings line -5.5 won
+Home team Hawai'i Rainbow Warriors away team is CSU Fullerton Titans time is 2022-02-13T05:07:32Z 
+Pinnacle Line -18 Draft kings line -20.5 won
+Home team San José St Spartans away team is Nevada Wolf Pack time is 2022-02-18T05:10:22Z 
+Pinnacle Line 27.5 Draft kings line 31.5 won
+Home team Hawai'i Rainbow Warriors away team is Cal Poly Mustangs time is 2022-02-25T05:07:23Z 
+Pinnacle Line -11.5 Draft kings line -6.5 wash
+Home team UC Irvine Anteaters away team is Long Beach St 49ers time is 2022-02-27T05:06:35Z 
+Pinnacle Line -16.5 Draft kings line -14.5 lost
+Home team Santa Clara Broncos away team is Portland Pilots time is 2022-03-06T06:24:31Z 
+Pinnacle Line -13.5 Draft kings line -10.5 won
+Home team Ohio State Buckeyes away team is Loyola (Chi) Ramblers time is 2022-03-18T16:15:00Z 
+Pinnacle Line -1 Draft kings line 1 won
+Home team Duke Blue Devils away team is Texas Tech Red Raiders time is 2022-03-25T01:39:00Z 
+Pinnacle Line 1 Draft kings line -1 lost
+Home team Oregon St Beavers away team is Tulsa Golden Hurricane time is 2022-11-08T05:06:47Z 
+Pinnacle Line -3.5 Draft kings line -1.5 won
+Home team East Carolina Pirates away team is Mercer Bears time is 2022-11-09T00:00:00Z 
+Pinnacle Line 1 Draft kings line -1  lost
+Home team Hawai'i Rainbow Warriors away team is Miss Valley St Delta Devils time is 2022-11-12T05:09:29Z 
+Pinnacle Line 17 Draft kings line 19.5 won
+Home team Wisconsin Badgers away team is Green Bay Phoenix time is 2022-11-16T02:00:00Z 
+Pinnacle Line -29 Draft kings line -27 lost
+Home team UC San Diego Tritons away team is California Golden Bears time is 2022-11-16T03:00:00Z 
+Pinnacle Line 4.5 Draft kings line 3 won
+Home team Arizona Wildcats away team is Utah Tech Trailblazers time is 2022-11-18T02:00:00Z 
+Pinnacle Line 27.5 Draft kings line 29 
+Home team Duke Blue Devils away team is Delaware Blue Hens time is 2022-11-19T00:00:00Z 
+Pinnacle Line -23 Draft kings line -21.5 won
+Home team Boise State Broncos away team is Colorado Buffaloes time is 2022-11-21T00:00:00Z 
+Pinnacle Line -2.5 Draft kings line -1 won 
+Home team Wichita St Shockers away team is Grand Canyon Antelopes time is 2022-11-21T20:00:00Z 
+Pinnacle Line -1 Draft kings line -2.5 lost
+Home team UNLV Rebels away team is Southern Illinois Salukis time is 2022-11-22T06:00:00Z 
+Pinnacle Line 1 Draft kings line -0.5 lost
+Home team UNLV Rebels away team is Southern Illinois Salukis time is 2022-11-22T06:19:30Z 
+Pinnacle Line 1.5 Draft kings line 5.5 won
+Home team Southern Illinois Salukis away team is Cal Baptist Lancers time is 2022-11-24T06:00:00Z 
+Pinnacle Line -3.5 Draft kings line -6.5 won
+Home team Gonzaga Bulldogs away team is Portland St Vikings time is 2022-11-25T05:44:24Z 
+Pinnacle Line 29.5 Draft kings line 27.5 lost
+Home team Pacific Tigers away team is Idaho Vandals time is 2022-11-26T02:00:00Z 
+Pinnacle Line -12.5 Draft kings line -14 
+Home team Indiana Hoosiers away team is North Carolina Tar Heels time is 2022-12-01T02:15:00Z 
+Pinnacle Line 5 Draft kings line 6.5 
+Home team Idaho State Bengals away team is Southern Utah Thunderbirds time is 2022-12-04T01:00:00Z 
+Pinnacle Line -5 Draft kings line -6.5 
+Home team Pepperdine Waves away team is Nevada Wolf Pack time is 2022-12-07T04:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Maryland Terrapins away team is UCLA Bruins time is 2022-12-15T02:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Delaware Blue Hens away team is Hofstra Pride time is 2022-12-30T00:00:00Z 
+Pinnacle Line 1.5 Draft kings line -1 
+Home team Notre Dame Fighting Irish away team is Miami Hurricanes time is 2022-12-30T19:00:00Z 
+Pinnacle Line 3.5 Draft kings line 2 
+Home team North Dakota Fighting Hawks away team is North Dakota St Bison time is 2022-12-31T01:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Buffalo Bulls away team is Ohio Bobcats time is 2023-01-04T00:00:00Z 
+Pinnacle Line 1 Draft kings line -1 
+Home team St. Bonaventure Bonnies away team is George Mason Patriots time is 2023-01-05T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Tarleton State Texans away team is Southern Utah Thunderbirds time is 2023-01-06T01:00:00Z 
+Pinnacle Line 1 Draft kings line -1 
+Home team Appalachian St Mountaineers away team is Troy Trojans time is 2023-01-14T21:00:00Z 
+Pinnacle Line -1.5 Draft kings line 1 
+Home team Chattanooga Mocs away team is Furman Paladins time is 2023-01-19T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1.5 
+Home team St. Bonaventure Bonnies away team is Duquesne Dukes time is 2023-01-19T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Long Beach St 49ers away team is CSU Fullerton Titans time is 2023-01-20T03:00:00Z 
+Pinnacle Line -3.5 Draft kings line -5 
+Home team West Virginia Mountaineers away team is Texas Longhorns time is 2023-01-21T23:00:00Z 
+Pinnacle Line 1 Draft kings line -1 
+Home team Sacramento St Hornets away team is Eastern Washington Eagles time is 2023-02-03T03:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Oakland Golden Grizzlies away team is Cleveland St Vikings time is 2023-02-04T18:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Kansas St Wildcats away team is Texas Longhorns time is 2023-02-04T21:00:00Z 
+Pinnacle Line 1 Draft kings line -1 
+Home team Wake Forest Demon Deacons away team is North Carolina Tar Heels time is 2023-02-08T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team George Washington Colonials away team is Richmond Spiders time is 2023-02-09T00:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team TCU Horned Frogs away team is Baylor Bears time is 2023-02-11T21:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Oklahoma Sooners away team is Kansas St Wildcats time is 2023-02-15T02:00:00Z 
+Pinnacle Line -1 Draft kings line 1 
+Home team Santa Clara Broncos away team is San Francisco Dons time is 2023-03-05T05:51:00Z 
+Pinnacle Line -2.5 Draft kings line 0.5 
+Home team Gonzaga Bulldogs away team is San Francisco Dons time is 2023-03-07T04:55:00Z 
+Pinnacle Line 8.5 Draft kings line 12.5 
+Home team CSU Fullerton Titans away team is Hawai'i Rainbow Warriors time is 2023-03-09T22:30:00Z 
+Pinnacle Line 1 Draft kings line -1 
+Home team Florida Atlantic Owls away team is UAB Blazers time is 2023-03-12T01:30:00Z 
+Pinnacle Line -1 Draft kings line 1 
