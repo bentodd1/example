@@ -16,4 +16,9 @@ class Game extends Model
         'homeTeam',
         'awayTeam'
     ];
+
+    public function sport()
+    {
+        return $this->belongsTo(Sport::class, 'sportId', 'id');
+    }
 }

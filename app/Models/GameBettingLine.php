@@ -17,7 +17,8 @@ class GameBettingLine extends Model
         'isCurrent',
         'created_at',
         'updated_at',
-        'expired_time'
+        'expired_time',
+        'source'
     ];
 
     public function casino()

@@ -14,7 +14,8 @@ class Score extends Model
         'homeTeamScore',
         'awayTeamScore',
         'apiId',
-        'lastUpdated'
+        'lastUpdated',
+        'source'
     ];
 }
 

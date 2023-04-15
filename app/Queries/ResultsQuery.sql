@@ -2,7 +2,9 @@ select g.homeTeam,
        g.awayTeam,
        g.commenceTime,
        gbl.homeTeamSpread as sharpHomeSpread,
+       gbl.source,
        gbl2.homeTeamSpread as nonSharpSpread,
+       gbl2.source,
        c2.title,
        c.title,
        simulated_bets.*
@@ -14,5 +16,4 @@ from simulated_bets
          join casinos c on gbl2.casinoId = c.id
          join casinos c2 on gbl.casinoId = c2.id
 
-where gbl2.casinoId in (1,3,7,13)
 order by  commenceTime;

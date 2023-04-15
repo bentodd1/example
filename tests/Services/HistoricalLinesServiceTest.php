@@ -71,8 +71,6 @@ class HistoricalLinesServiceTest extends TestCase
             [76, 80, 1, 2, false],
             [76, 80, 2, 1, true],
 
-
-
         ];
     }
 }
